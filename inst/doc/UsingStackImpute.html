@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Created by Dr. Lauren J Beesley. Contact: lbeesley@umich.edu" />
+
+
+<title>UsingStackImpute</title>
+
+<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">UsingStackImpute</h1>
+<h4 class="author">Created by Dr. Lauren J Beesley. Contact: <a href="mailto:lbeesley@umich.edu" class="email">lbeesley@umich.edu</a></h4>
+<h4 class="date">08 September, 2021</h4>
+
+
+
+<p>In this vignette, we provide a brief introduction to using the R package <em>StackImpute</em>. The purpose of this package is to provide resources for performing data analysis in the presence of missing data through analysis of a stacked version of the multiply imputed data. We will not include technical details about this estimation approach and instead focus on implementation. For additional details about the estimation algorithm, we refer the reader to “A stacked approach for chained equations multiple imputation incorporating the substantive model” by Lauren J Beesley and Jeremy M G Taylor in <em>Biometrics</em> (2020) and “Accounting for not-at-random missingness through imputation stacking” by Lauren J Beesley and Jeremy M G Taylor currently on <em>arXiv</em>.</p>
+<p>Many researchers have noted that we can do a “good” job estimating regression model parameters by analyzing a stacked version of multiply imputed data. However, estimation of standard errors has proven to be a challenging problem. We provide several estimation strategies and corresponding software for routine estimation as follows:</p>
+<ol style="list-style-type: decimal">
+<li><p>For glms and coxph model fits, the function <em>Louis_Information</em> will estimate the information matrix accounting for imputation uncertainty.</p></li>
+<li><p>For more general likelihood-based inference, the function <em>Louis_Information_Custom</em> will take user-specified score and covariance matrices from stacked and weighted analysis. For this function, we note that the model-output dispersion parameter for the <em>glm</em> function in R is incorrect for stacked multiple imputations and provide a function to obtain a better estimate of the dispersion parameter.</p></li>
+<li><p>The function <em>Bootstrap_Variance</em> implements a bootstrap-based method for estimating the covariance matrix as proposed by Dr. Paul Bernhardt in “A Comparison of Stacked and Pooled Multiple Imputation” at the Joint Statistical Meetings in 2019.</p></li>
+<li><p>Finally, the function <em>Jackknife_Variance</em> implements a jackknife-based variant of the estimator proposed by Dr. Paul Bernhardt.</p></li>
+</ol>
+<div id="example-analysis-using-standard-imputation-stacking" class="section level2">
+<h2>Example analysis using standard imputation stacking</h2>
+<p>First, we suppose that we have imputed missing data using usual multiple imputation incorporating both the outcome and covariates into the imputation. Instead of estimating outcome model parameters using Rubin’s combining rules, we propose stacking the multiple imputations to create one long dataset. Then, we perform a weighted analysis, where each subject is weighted by 1/M where M is the number of multiple imputations as follows:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="do">### Simulate Data</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>Nobs <span class="ot">=</span> <span class="dv">2000</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>DAT <span class="ot">=</span> MASS<span class="sc">::</span><span class="fu">mvrnorm</span>(<span class="at">n =</span> Nobs, <span class="at">mu =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>), <span class="at">Sigma =</span> <span class="fu">rbind</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="fl">0.18</span>, <span class="fl">0.42</span>), <span class="fu">c</span>(<span class="fl">0.18</span>, <span class="fl">0.09</span>, <span class="fl">0.12</span>),<span class="fu">c</span>(<span class="fl">0.42</span>, <span class="fl">0.12</span>, <span class="fl">0.49</span> )))</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">=</span> DAT[,<span class="dv">1</span>]</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>B <span class="ot">=</span> DAT[,<span class="dv">2</span>]</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>X <span class="ot">=</span> DAT[,<span class="dv">3</span>]</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>S <span class="ot">=</span> <span class="fu">sample</span>(<span class="at">x=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">size =</span> Nobs, <span class="at">prob =</span> <span class="fu">c</span>(<span class="fl">0.5</span>,<span class="fl">0.5</span>), <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>complete_cases <span class="ot">=</span> <span class="fu">data.frame</span>(Y, X, B, S)[S <span class="sc">==</span> <span class="dv">1</span>,] <span class="co">#complete case subjects only</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>observed_data <span class="ot">=</span> <span class="fu">data.frame</span>(Y, X, B, S) <span class="co">#data with missingness in B</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>observed_data[S<span class="sc">==</span><span class="dv">0</span>,<span class="st">&#39;B&#39;</span>] <span class="ot">=</span> <span class="cn">NA</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="do">### Step 1: Impute B|X,Y</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>imputes <span class="ot">=</span> mice<span class="sc">::</span><span class="fu">mice</span>(observed_data, <span class="at">m=</span><span class="dv">50</span>, <span class="at">method=</span><span class="st">&quot;norm&quot;</span>, <span class="at">printFlag=</span>F, <span class="at">maxit =</span> <span class="dv">1</span>)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">=</span> imputes<span class="sc">$</span>predictorMatrix </span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>pred[pred <span class="sc">!=</span> <span class="dv">0</span>] <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>pred[<span class="st">&quot;B&quot;</span>,<span class="st">&quot;X&quot;</span>] <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>pred[<span class="st">&quot;B&quot;</span>,<span class="st">&quot;Y&quot;</span>] <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>imputes <span class="ot">=</span> mice<span class="sc">::</span><span class="fu">mice</span>(observed_data, <span class="at">m=</span><span class="dv">50</span>, <span class="at">predictorMatrix=</span>pred, <span class="at">method=</span><span class="st">&quot;norm&quot;</span>, <span class="at">printFlag=</span>F)</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="do">### Step 2: Stack imputed datasets  </span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>stack <span class="ot">=</span> mice<span class="sc">::</span><span class="fu">complete</span>(imputes, <span class="at">action=</span><span class="st">&quot;long&quot;</span>, <span class="at">include =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="do">### Step 3: Obtain weights</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>stack<span class="sc">$</span>wt <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>stack <span class="ot">=</span> <span class="fu">as.data.frame</span>(stack <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(.id) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">wt =</span> wt <span class="sc">/</span> <span class="fu">sum</span>(wt)))</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="do">### Step 4: Point estimation</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">=</span> <span class="fu">glm</span>(Y <span class="sc">~</span>X <span class="sc">+</span> B, <span class="at">data=</span>stack, <span class="at">family=</span><span class="fu">gaussian</span>(), <span class="at">weights =</span> stack<span class="sc">$</span>wt)</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="do">### Step 5a: Variance estimation option 1 (for glm and coxph models only)</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>Info <span class="ot">=</span> StackImpute<span class="sc">::</span><span class="fu">Louis_Information</span>(fit, stack, <span class="at">M =</span> <span class="dv">50</span>)</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>VARIANCE <span class="ot">=</span> <span class="fu">diag</span>(<span class="fu">solve</span>(Info))</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="do">### Step 5b: Variance estimation using custom score and covariance matrices (any model with corresponding likelihood)</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>covariates <span class="ot">=</span> <span class="fu">as.matrix</span>(<span class="fu">cbind</span>(<span class="dv">1</span>,stack<span class="sc">$</span>X, stack<span class="sc">$</span>B))</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>score <span class="ot">=</span> <span class="fu">sweep</span>(covariates,<span class="dv">1</span>,stack<span class="sc">$</span>Y <span class="sc">-</span> covariates <span class="sc">%*%</span> <span class="fu">matrix</span>(<span class="fu">coef</span>(fit)), <span class="st">&#39;*&#39;</span>)<span class="sc">/</span>StackImpute<span class="sc">::</span><span class="fu">glm.weighted.dispersion</span>(fit)</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>covariance_weighted <span class="ot">=</span> <span class="fu">summary</span>(fit)<span class="sc">$</span>cov.unscaled<span class="sc">*</span>StackImpute<span class="sc">::</span><span class="fu">glm.weighted.dispersion</span>(fit) </span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>Info <span class="ot">=</span> StackImpute<span class="sc">::</span><span class="fu">Louis_Information_Custom</span>(score, covariance_weighted, stack, <span class="at">M =</span> <span class="dv">50</span>)</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>VARIANCE_custom <span class="ot">=</span> <span class="fu">diag</span>(<span class="fu">solve</span>(Info))</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="do">### Step 5c: Variance estimation using bootstrap (any model with vcov method)</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>bootcovar <span class="ot">=</span> StackImpute<span class="sc">::</span><span class="fu">Bootstrap_Variance</span>(fit, stack, <span class="at">M =</span> <span class="dv">50</span>, <span class="at">n_boot =</span> <span class="dv">100</span>)</span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>VARIANCE_boot <span class="ot">=</span> <span class="fu">diag</span>(bootcovar)</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="do">### Step 5d: Variance estimation using jackknife (any model with vcov method)</span></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>jackcovar <span class="ot">=</span> StackImpute<span class="sc">::</span><span class="fu">Jackknife_Variance</span>(fit, stack, <span class="at">M =</span> <span class="dv">50</span>)</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>VARIANCE_jack <span class="ot">=</span> <span class="fu">diag</span>(jackcovar)</span></code></pre></div>
+</div>
+<div id="example-analysis-using-modified-imputation-stacking-allowing-for-compatibility-of-the-imputation-and-analysis-models" class="section level2">
+<h2>Example analysis using modified imputation stacking allowing for compatibility of the imputation and analysis models</h2>
+<p>In Beesley and Taylor (2020) in <em>Biometrics</em>, we propose a modification to this data analysis pipeline that involves imputing missing covariates from distributions that do not condition on the outcome of interest and then performing a weighted analysis on the stacked data. In this case, weights are defined proportional to the distribution of the outcome given covariates in the complete case data. We can implement this modified analysis pipeline as follows:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="do">### Step 1: Impute B|X</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>imputes <span class="ot">=</span> mice<span class="sc">::</span><span class="fu">mice</span>(observed_data, <span class="at">m=</span><span class="dv">50</span>, <span class="at">method=</span><span class="st">&quot;norm&quot;</span>, <span class="at">printFlag=</span>F, <span class="at">maxit =</span> <span class="dv">1</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">=</span> imputes<span class="sc">$</span>predictorMatrix </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>pred[pred <span class="sc">!=</span> <span class="dv">0</span>] <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>pred[<span class="st">&quot;B&quot;</span>,<span class="st">&quot;X&quot;</span>] <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>imputes <span class="ot">=</span> mice<span class="sc">::</span><span class="fu">mice</span>(observed_data, <span class="at">m=</span><span class="dv">50</span>, <span class="at">predictorMatrix=</span>pred, <span class="at">method=</span><span class="st">&quot;norm&quot;</span>, <span class="at">printFlag=</span>F)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="do">### Step 2: Stack imputed datasets  </span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>stack <span class="ot">=</span> mice<span class="sc">::</span><span class="fu">complete</span>(imputes, <span class="at">action=</span><span class="st">&quot;long&quot;</span>, <span class="at">include =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="do">### Step 3: Obtain weights</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>fit_cc <span class="ot">=</span> <span class="fu">glm</span>(Y <span class="sc">~</span> X <span class="sc">+</span> B, <span class="at">family=</span><span class="st">&#39;gaussian&#39;</span>, <span class="at">data=</span> complete_cases)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>stack<span class="sc">$</span>wt <span class="ot">=</span> <span class="fu">dnorm</span>(stack<span class="sc">$</span>Y,<span class="at">mean =</span> <span class="fu">predict</span>(fit_cc, <span class="at">newdata =</span> stack), <span class="at">sd =</span> <span class="fu">sqrt</span>(<span class="fu">summary</span>(fit_cc)<span class="sc">$</span>dispersion))</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>stack <span class="ot">=</span> <span class="fu">as.data.frame</span>(stack <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(.id) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">wt =</span> wt <span class="sc">/</span> <span class="fu">sum</span>(wt)))</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="do">### Step 4: Point estimation</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">=</span> <span class="fu">glm</span>(Y <span class="sc">~</span>X <span class="sc">+</span> B, <span class="at">data=</span>stack, <span class="at">family=</span><span class="fu">gaussian</span>(), <span class="at">weights =</span> stack<span class="sc">$</span>wt)</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="do">### Any one of the above variance estimation strategies can then be applied.</span></span></code></pre></div>
+</div>
+<div id="a-note-on-stack-structure" class="section level2">
+<h2>A note on stack structure</h2>
+<p>We can equivalently performed our proposed data analysis using “short” stacked dataset in which subjects with fully-observed data only appear once. The advantage of this approach is that estimation may be faster and the stacked dataset may be much smaller. We can perform the above analysis using the shorter stack obtained below.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="do">### Step 2: Stack imputed datasets  </span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>stack <span class="ot">=</span> mice<span class="sc">::</span><span class="fu">complete</span>(imputes, <span class="at">action=</span><span class="st">&quot;long&quot;</span>, <span class="at">include =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>cc <span class="ot">=</span> <span class="fu">unique</span>(stack<span class="sc">$</span>.id[stack<span class="sc">$</span>S <span class="sc">==</span> <span class="dv">1</span>])</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>stack_short <span class="ot">=</span> <span class="fu">rbind</span>(stack[stack<span class="sc">$</span>S<span class="sc">==</span><span class="dv">0</span>,], stack[stack<span class="sc">$</span>S<span class="sc">==</span><span class="dv">1</span> <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">duplicated</span>(stack<span class="sc">$</span>.id),])</span></code></pre></div>
+</div>
+<div id="example-analysis-addressing-not-at-random-missingness-through-stacked-and-weighted-analysis" class="section level2">
+<h2>Example analysis addressing not-at-random missingness through stacked and weighted analysis</h2>
+<p>In Beesley and Taylor (2021) on <em>arXiv</em>, we propose another modification to this data analysis pipeline that accounts for not-at-random missingness through weighted analysis of stacked multiple imputations. Weights are a simple function of the imputed data and assumptions about the missingness mechanism. In the special case where missingness follows a logistic regression, the weights take a very simple form as shown.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="do">### Simulate Data</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>prob_obs <span class="ot">=</span> <span class="fu">exp</span>(<span class="dv">2</span><span class="sc">*</span>B <span class="sc">+</span> <span class="dv">1</span><span class="sc">*</span>Y)<span class="sc">/</span>(<span class="dv">1</span><span class="sc">+</span><span class="fu">exp</span>(<span class="dv">2</span><span class="sc">*</span>B <span class="sc">+</span> <span class="dv">1</span><span class="sc">*</span>Y))</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>S_mnar <span class="ot">=</span> <span class="fu">as.numeric</span>(prob_obs <span class="sc">&gt;</span> <span class="fu">runif</span>(Nobs,<span class="dv">0</span>,<span class="dv">1</span>))</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>complete_cases <span class="ot">=</span> <span class="fu">data.frame</span>(Y, X, B, <span class="at">S=</span>S_mnar)[S_mnar <span class="sc">==</span> <span class="dv">1</span>,] <span class="co">#complete case subjects only</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>observed_data_mnar <span class="ot">=</span> <span class="fu">data.frame</span>(Y, X, B, <span class="at">S=</span>S_mnar) <span class="co">#data with missingness in B</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>observed_data_mnar[S_mnar<span class="sc">==</span><span class="dv">0</span>,<span class="st">&#39;B&#39;</span>] <span class="ot">=</span> <span class="cn">NA</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="do">### Step 1: Impute B|X,Y</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>imputes_mnar <span class="ot">=</span> mice<span class="sc">::</span><span class="fu">mice</span>(observed_data_mnar, <span class="at">m=</span><span class="dv">50</span>, <span class="at">method=</span><span class="st">&quot;norm&quot;</span>, <span class="at">printFlag=</span>F, <span class="at">maxit =</span> <span class="dv">1</span>)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">=</span> imputes_mnar<span class="sc">$</span>predictorMatrix </span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>pred[pred <span class="sc">!=</span> <span class="dv">0</span>] <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>pred[<span class="st">&quot;B&quot;</span>,<span class="st">&quot;X&quot;</span>] <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>pred[<span class="st">&quot;B&quot;</span>,<span class="st">&quot;Y&quot;</span>] <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>imputes_mnar <span class="ot">=</span> mice<span class="sc">::</span><span class="fu">mice</span>(observed_data_mnar, <span class="at">m=</span><span class="dv">50</span>, <span class="at">predictorMatrix=</span>pred, <span class="at">method=</span><span class="st">&quot;norm&quot;</span>, <span class="at">printFlag=</span>F)</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="do">### Step 2: Stack imputed datasets</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>stack <span class="ot">=</span> mice<span class="sc">::</span><span class="fu">complete</span>(imputes_mnar, <span class="at">action=</span><span class="st">&quot;long&quot;</span>, <span class="at">include =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="do">### Step 3: Obtain weights</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>phi1_assumed <span class="ot">=</span> <span class="dv">2</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>stack<span class="sc">$</span>wt <span class="ot">=</span> <span class="fu">exp</span>(<span class="sc">-</span>phi1_assumed<span class="sc">*</span>stack<span class="sc">$</span>B)</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>stack <span class="ot">=</span> <span class="fu">as.data.frame</span>(stack <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(.id) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">wt =</span> wt <span class="sc">/</span> <span class="fu">sum</span>(wt)))</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="do">### Step 4: Point estimation</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">=</span> <span class="fu">glm</span>(Y <span class="sc">~</span>X <span class="sc">+</span> B, <span class="at">data=</span>stack, <span class="at">family=</span><span class="fu">gaussian</span>(), <span class="at">weights =</span> stack<span class="sc">$</span>wt)</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="do">### Any one of the above variance estimation strategies can then be applied.</span></span></code></pre></div>
+</div>
+<div id="example-analysis-addressing-not-at-random-missingness-using-the-method-of-tompsett-et-al.-2018" class="section level2">
+<h2>Example analysis addressing not-at-random missingness using the method of Tompsett et al. (2018)</h2>
+<p>In Tompsett et al. (2018) in <em>Statistics in Medicine</em>, researchers explore an alternative strategy for addressing not-at-random missingness. These researchers handle MNAR missingness by positing a pattern mixture model structure for the imputation models, where the adjusted association between a covariate’s value and its own missingness is treated as a fixed sensitivity analysis-type parameter. Here, we demonstrate how we can apply this method to address the MNAR missingness.</p>
+<!-- results = c() -->
+<!-- resultsTomp = c() -->
+<!-- theta = c() -->
+<!-- for(i in c(1:100)){ -->
+<!-- S_mnar = as.numeric(prob_obs > runif(Nobs,0,1)) -->
+<!-- fit = glm(S_mnar~X+B+Y, family = 'binomial') -->
+<!-- fitTomp = glm(B~X+Y+as.numeric(1-S_mnar), family = 'gaussian') -->
+<!-- fitTheta = glm(Y~X+B, family = 'gaussian') -->
+<!-- results = rbind(results, as.numeric(coef(fit))) -->
+<!-- resultsTomp = rbind(resultsTomp, as.numeric(coef(fitTomp))) -->
+<!-- theta = rbind(theta, as.numeric(coef(fitTheta))) -->
+<!-- } -->
+<!-- apply(results[,2:4],2,mean) -->
+<!-- apply(resultsTomp[,2:4],2,mean) -->
+<!-- apply(theta[,2:3],2,mean) -->
+<!-- plot(B[S_mnar == 1]) -->
+<!-- points(B[S_mnar == 0], col = 'red') -->
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="do">### Imputation Function (modified version of mice::mice.impute.mnar.norm())</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>mice.impute.mnar.norm2 <span class="ot">=</span> <span class="cf">function</span> (y, ry, x, <span class="at">wy =</span> <span class="cn">NULL</span>, <span class="at">ums =</span> <span class="cn">NULL</span>, <span class="at">umx =</span> <span class="cn">NULL</span>, ...){</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  u <span class="ot">&lt;-</span> mice<span class="sc">:::</span><span class="fu">parse.ums</span>(x, <span class="at">ums =</span> ums, <span class="at">umx =</span> umx, ...)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(wy))</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    wy <span class="ot">&lt;-</span> <span class="sc">!</span>ry</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="dv">1</span>, <span class="fu">as.matrix</span>(x))</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  parm <span class="ot">&lt;-</span> mice<span class="sc">:::</span><span class="fu">.norm.draw</span>(y, ry, x, ...)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(x[wy, ] <span class="sc">%*%</span> parm<span class="sc">$</span>beta <span class="sc">+</span> <span class="fu">as.matrix</span>(u<span class="sc">$</span>x[wy, ]) <span class="sc">%*%</span> <span class="fu">as.matrix</span>(u<span class="sc">$</span>delta) <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="fu">sum</span>(wy)) <span class="sc">*</span>parm<span class="sc">$</span>sigma)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="do">### *Ideal* pattern mixture model offset parameter for these simulated data:</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>delta1_assumed <span class="ot">=</span> <span class="sc">-</span><span class="fl">0.087</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="do">### Step 1: Impute B|X,Y,S</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>mnar.blot <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">B =</span> <span class="fu">list</span>(<span class="at">ums =</span><span class="fu">paste0</span>(<span class="st">&#39;-&#39;</span>,<span class="fu">abs</span>(delta1_assumed)))) </span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>imputes_pmm <span class="ot">=</span> mice<span class="sc">::</span><span class="fu">mice</span>(observed_data_mnar, <span class="at">m=</span><span class="dv">50</span>, <span class="at">method=</span><span class="st">&quot;mnar.norm2&quot;</span>, <span class="at">printFlag=</span>F, <span class="at">maxit =</span> <span class="dv">1</span>, <span class="at">blots =</span> mnar.blot)</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">=</span> imputes_pmm<span class="sc">$</span>predictorMatrix </span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>pred[pred <span class="sc">!=</span> <span class="dv">0</span>] <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>pred[<span class="st">&quot;B&quot;</span>,<span class="st">&quot;X&quot;</span>] <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>pred[<span class="st">&quot;B&quot;</span>,<span class="st">&quot;Y&quot;</span>] <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>imputes_pmm <span class="ot">=</span> mice<span class="sc">::</span><span class="fu">mice</span>(observed_data_mnar, <span class="at">m=</span><span class="dv">50</span>, <span class="at">predictorMatrix=</span>pred, <span class="at">method=</span><span class="st">&quot;mnar.norm2&quot;</span>, <span class="at">printFlag=</span>F, <span class="at">blots =</span> mnar.blot)</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="do">### Step 2: Apply Rubin&#39;s Rules to obtain point estimates and standard errors</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">=</span> <span class="fu">summary</span>(mice<span class="sc">::</span><span class="fu">pool</span>(<span class="fu">with</span>(imputes_pmm,<span class="fu">glm</span>(Y <span class="sc">~</span> X <span class="sc">+</span> B, <span class="at">family=</span><span class="fu">gaussian</span>()))))</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>param <span class="ot">=</span> fit<span class="sc">$</span>estimate</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>VARIANCE <span class="ot">=</span> (fit<span class="sc">$</span>std.error)<span class="sc">^</span><span class="dv">2</span></span></code></pre></div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
